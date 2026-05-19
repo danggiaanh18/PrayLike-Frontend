@@ -1,0 +1,294 @@
+/* src/pages/Login/login.css */
+
+/* ========================================
+   📐 LAYOUT CHÍNH
+   ======================================== */
+.login-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.login-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  transform: translateY(0);
+}
+
+.login-form-new {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ========================================
+   📧 EMAIL VÀ VERIFY BUTTON - CÙNG HÀNG
+   ======================================== */
+.email-verify-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  height: 48px;
+}
+
+/* ✅ Email Input Container */
+.email-input {
+  flex: 2;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  min-width: 0;
+}
+
+/* ✅ Email 輸入框文字靠左對齊 */
+.email-input.email-left-align input,
+.email-input.email-left-align .form-input {
+  text-align: left !important;
+  padding-left: 16px !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+.email-input.email-left-align input::placeholder,
+.email-input.email-left-align .form-input::placeholder {
+  text-align: left !important;
+  font-size: 13px !important;
+}
+
+/* ✅ VERIFY 按鈕 */
+.verify-button {
+  flex: 0 0 auto;
+  width: 70px !important;
+  min-width: 60px !important;
+  max-width: 75px !important;
+  white-space: nowrap;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+/* ========================================
+   🔢 VERIFICATION CODE INPUT
+   ======================================== */
+.verification-code-input {
+  animation: fadeInDown 0.3s ease-out;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  width: 100%;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   💬 MESSAGE CONTAINER
+   ======================================== */
+.message-container {
+  padding: 12px;
+  border-radius: 25px;
+  font-size: 14px;
+  text-align: center;
+  margin: 8px 0;
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ✅ Error Message */
+.error-message {
+  color: #dc3545 !important;
+  background-color: rgba(248, 215, 218, 0.9);
+  border: 1px solid #f5c6cb;
+}
+
+.success-message {
+  color: #155724 !important;
+  background-color: rgba(212, 237, 218, 0.9);
+  border: 1px solid #c3e6cb;
+  font-weight: bold;
+}
+
+/* ✅ Login Success Message */
+.login-success-message {
+  color: #155724 !important;
+  background-color: rgba(212, 237, 218, 0.9);
+  border: 1px solid #c3e6cb;
+  font-weight: bold;
+}
+
+/* ========================================
+   CONFIRM 按鈕樣式
+   ======================================== */
+.login-button,
+button.login-button,
+button.login-button.action-button,
+button.login-button.action-button--primary,
+button.login-button.action-button--medium {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  padding: 0 20px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* ✅ Có mã xác thực → Màu vàng */
+.login-button.has-code {
+  background-color: #FFF9EC !important;
+  color: #000000 !important;
+}
+
+.login-button.has-code:hover:not(:disabled) {
+  background-color: #FFF5D6 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.login-button.has-code:active:not(:disabled) {
+  background-color: #FFF9EC !important;
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Đảm bảo các element bên trong không ảnh hưởng height */
+.login-button > *,
+.login-button span,
+.login-button div {
+  line-height: normal !important;
+  height: auto !important;
+}
+
+/* ========================================
+   🌐 SOCIAL LOGIN CONTAINER
+   ======================================== */
+.social-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* ========================================
+   響應式設計
+   ======================================== */
+@media (max-width: 375px) {
+  .login-page {
+    padding: 16px;
+  }
+  
+  .login-main-content {
+    gap: 16px;
+    max-width: 100%;
+    transform: translateY(0);
+  }
+  
+  .email-verify-row {
+    gap: 8px;
+  }
+  
+  .verify-button {
+    min-width: 60px !important;
+    width: 60px !important;
+  }
+  
+  .social-login-container {
+    gap: 12px;
+  }
+}
+
+/* ========================================
+   字體大小調整
+   ======================================== */
+
+/* Email Input - Font size */
+.email-input input,
+.email-input .form-input,
+.form-input-container.email-input input,
+.form-input-container.email-input .form-input,
+input.form-input[type="email"],
+div.email-input input[type="email"],
+.email-input input[type="email"] {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+/* Email placeholder */
+.email-input input::placeholder,
+.email-input .form-input::placeholder,
+.form-input-container.email-input input::placeholder,
+input.form-input[type="email"]::placeholder {
+  font-size: 13px !important;
+}
+
+/* CONFIRM Button - Font size */
+.login-button,
+button.login-button,
+button.login-button.action-button,
+button.login-button.action-button.action-button--primary,
+button.action-button.action-button--primary.action-button--medium.verify-button,
+.action-button.action-button--primary.action-button--medium {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 375px) {
+  .email-input input,
+  .email-input .form-input,
+  input.form-input[type="email"] {
+    font-size: 12px !important;
+  }
+  
+  .email-input.email-left-align input::placeholder,
+  .email-input.email-left-align .form-input::placeholder {
+    font-size: 12px !important;
+  }
+  
+  .login-button,
+  button.login-button,
+  button.action-button,
+  .verify-button {
+    font-size: 12px !important;
+  }
+}

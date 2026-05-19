@@ -1,0 +1,374 @@
+/* ./src/components/CategoryLabel/CategoryLabel.css */
+
+/* ========================================
+   📦 標籤包裝器 - ONE LINE VERSION
+   ======================================== */
+.category-label-wrapper {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 120px !important; /* ✅ TĂNG để chứa full text 1 dòng */
+  margin: 8px auto 0 !important;
+  pointer-events: auto !important;
+  cursor: default !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 10 !important;
+  padding-top: 4px !important;
+}
+
+/* ========================================
+   🔺 向上的小三角形箭頭
+   ======================================== */
+.category-label-arrow {
+  width: 0 !important;
+  height: 0 !important;
+  border-left: 5px solid transparent !important;
+  border-right: 5px solid transparent !important;
+  border-bottom: 5px solid #F4E4C1 !important;
+  margin-bottom: 0px !important;
+  z-index: 11 !important;
+  flex-shrink: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* ========================================
+   💬 對話框主體 - ONE LINE
+   ======================================== */
+.category-label {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  min-height: 24px !important; /* ✅ GIẢM vì chỉ 1 dòng */
+  max-height: 26px !important;
+  padding: 4px 7px !important; /* ✅ Compact padding */
+  background: linear-gradient(135deg, #F4E4C1 0%, #E8D4A8 100%) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+  position: relative !important;
+  z-index: 10 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* ========================================
+   📝 標籤文字 - ONE LINE ONLY
+   ======================================== */
+.category-label-text {
+  /* 🔒 FORCE DISPLAY */
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 100 !important;
+  
+  /* 📏 Kích thước & Kiểu chữ - SMALLER FOR ONE LINE */
+  font-size: 8.5px !important; /* ✅ GIẢM để vừa 1 dòng */
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.1px !important; /* ✅ GIẢM letter-spacing */
+  
+  /* 🎨 Màu sắc & Hiệu ứng */
+  color: #5D4E37 !important;
+  text-shadow: 
+    0 1px 2px rgba(255, 255, 255, 0.8),
+    0 0 1px rgba(93, 78, 55, 0.3) !important;
+  
+  /* 📐 Layout - FORCE ONE LINE */
+  width: 100% !important;
+  max-width: 100% !important;
+  text-align: center !important;
+  white-space: nowrap !important; /* ✅ FORCE 1 dòng */
+  overflow: hidden !important;
+  text-overflow: ellipsis !important; /* ✅ Dự phòng nếu quá dài */
+  
+  /* 🔒 Khác */
+  user-select: none !important;
+  padding: 0 1px !important;
+  margin: 0 !important;
+  
+  /* 🚫 TẮT ANIMATION */
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.category-label-wrapper.active .category-label {
+  background: linear-gradient(135deg, #FFDE97) !important;
+}
+
+.category-label-wrapper.active .category-label-arrow {
+  border-bottom: 5px solid #FFDE97 !important; 
+}
+/* ========================================
+   🎯 HOVER EFFECT
+   ======================================== */
+.category-label-wrapper:hover .category-label {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18) !important;
+  transform: translateY(-1px) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* ========================================
+   ✨ FORCE SPACING VIA PARENT CONTAINER
+   ======================================== */
+.category-buttons {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  gap: 4px !important; /* ✅ GIẢM gap để có không gian cho label rộng */
+  width: 100% !important;
+  padding: 0 8px !important; /* ✅ GIẢM padding */
+  box-sizing: border-box !important;
+  flex-wrap: nowrap !important;
+}
+
+.category-buttons .category-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  flex: 0 1 auto !important;
+  min-width: 85px !important; /* ✅ TĂNG để chứa text */
+  max-width: 125px !important;
+}
+
+/* ========================================
+   📱 響應式設計 - ONE LINE VERSION
+   ======================================== */
+
+/* Cực nhỏ (≤360px) */
+@media (max-width: 360px) {
+  .category-label-wrapper {
+    max-width: 75px !important;
+  }
+
+  .category-label {
+    padding: 3px 5px !important;
+    min-height: 20px !important;
+    max-height: 22px !important;
+  }
+
+  .category-label-text {
+    font-size: 7px !important;
+    letter-spacing: 0px !important;
+  }
+
+  .category-buttons {
+    gap: 2px !important;
+    padding: 0 4px !important;
+  }
+
+  .category-buttons .category-item {
+    min-width: 65px !important;
+    max-width: 80px !important;
+  }
+}
+
+/* Nhỏ (361px - 480px) */
+@media (min-width: 361px) and (max-width: 480px) {
+  .category-label-wrapper {
+    max-width: 90px !important;
+  }
+
+  .category-label {
+    padding: 3px 6px !important;
+    min-height: 22px !important;
+    max-height: 24px !important;
+  }
+
+  .category-label-text {
+    font-size: 7.5px !important;
+    letter-spacing: 0.05px !important;
+  }
+
+  .category-buttons {
+    gap: 3px !important;
+    padding: 0 6px !important;
+  }
+
+  .category-buttons .category-item {
+    min-width: 75px !important;
+    max-width: 95px !important;
+  }
+}
+
+/* Trung bình (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .category-label-wrapper {
+    max-width: 105px !important;
+  }
+
+  .category-label {
+    padding: 4px 6px !important;
+    min-height: 23px !important;
+    max-height: 25px !important;
+  }
+
+  .category-label-text {
+    font-size: 8px !important;
+    letter-spacing: 0.1px !important;
+  }
+
+  .category-buttons {
+    gap: 3px !important;
+    padding: 0 7px !important;
+  }
+
+  .category-buttons .category-item {
+    min-width: 80px !important;
+    max-width: 110px !important;
+  }
+}
+
+/* Tablet (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .category-label-wrapper {
+    max-width: 115px !important;
+  }
+
+  .category-label {
+    padding: 4px 7px !important;
+    min-height: 24px !important;
+    max-height: 26px !important;
+  }
+
+  .category-label-text {
+    font-size: 8.5px !important;
+    letter-spacing: 0.1px !important;
+  }
+
+  .category-buttons {
+    gap: 4px !important;
+    padding: 0 8px !important;
+  }
+
+  .category-buttons .category-item {
+    min-width: 85px !important;
+    max-width: 120px !important;
+  }
+}
+
+/* Desktop nhỏ (1025px - 1366px) */
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .category-label-wrapper {
+    max-width: 120px !important;
+  }
+
+  .category-label {
+    padding: 4px 7px !important;
+    min-height: 24px !important;
+    max-height: 26px !important;
+  }
+
+  .category-label-text {
+    font-size: 8.5px !important;
+    letter-spacing: 0.1px !important;
+  }
+
+  .category-buttons {
+    gap: 4px !important;
+    padding: 0 8px !important;
+  }
+
+  .category-buttons .category-item {
+    min-width: 85px !important;
+    max-width: 125px !important;
+  }
+}
+
+/* Desktop chuẩn (1367px - 1920px) */
+@media (min-width: 1367px) and (max-width: 1920px) {
+  .category-label-wrapper {
+    max-width: 130px !important;
+  }
+
+  .category-label {
+    padding: 5px 8px !important;
+    min-height: 26px !important;
+    max-height: 28px !important;
+  }
+
+  .category-label-text {
+    font-size: 9px !important;
+    letter-spacing: 0.15px !important;
+  }
+
+  .category-buttons {
+    gap: 5px !important;
+    padding: 0 10px !important;
+  }
+
+  .category-buttons .category-item {
+    min-width: 90px !important;
+    max-width: 135px !important;
+  }
+}
+
+/* Desktop lớn (>1920px) */
+@media (min-width: 1921px) {
+  .category-label-wrapper {
+    max-width: 140px !important;
+  }
+
+  .category-label {
+    padding: 5px 9px !important;
+    min-height: 28px !important;
+    max-height: 30px !important;
+  }
+
+  .category-label-text {
+    font-size: 10px !important;
+    letter-spacing: 0.2px !important;
+  }
+
+  .category-buttons {
+    gap: 6px !important;
+    padding: 0 12px !important;
+  }
+
+  .category-buttons .category-item {
+    min-width: 95px !important;
+    max-width: 145px !important;
+  }
+}
+
+/* ========================================
+   🔧 FORCE VISIBILITY
+   ======================================== */
+.category-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+}
+
+.category-label-wrapper,
+.category-label-wrapper *,
+.category-label,
+.category-label *,
+.category-label-text {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* ========================================
+   🧹 XÓA ANIMATION
+   ======================================== */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(0); } }
+
+.category-label-wrapper *,
+.category-label *,
+.category-label-text * {
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+

@@ -1,0 +1,469 @@
+/* src/pages/Profile/Profile.css */
+
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.back-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    writing-mode: horizontal-tb;
+    white-space: nowrap;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ==================== AVATAR SECTION ==================== */
+
+.profile-avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+    padding: 30px 0;
+}
+
+.avatar-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.avatar-wrapper:hover {
+    transform: scale(1.05);
+}
+
+.avatar-edit-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #4CAF50;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: 3px solid #2D3656;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.avatar-edit-overlay:hover {
+    background: #45A049;
+    transform: scale(1.1);
+}
+
+.avatar-uploading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner-small {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.provider-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.provider-icon {
+    font-size: 20px;
+}
+
+.provider-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+/* ==================== PRIVACY POLICY DIALOG ==================== */
+
+.privacy-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.privacy-dialog {
+    background: #FFFFFF;
+    border-radius: 20px;
+    width: min(720px, 92vw);
+    max-height: 85vh;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.privacy-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    background: #f6f2ea;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.privacy-dialog-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a2332;
+}
+
+.privacy-dialog-close {
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    cursor: pointer;
+    color: #4a5568;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.privacy-dialog-close:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.privacy-dialog-body {
+    padding: 20px 24px;
+    overflow: auto;
+}
+
+.privacy-dialog-text {
+    color: #4a5568;
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 0;
+    white-space: pre-wrap;
+    font-family: inherit;
+}
+
+/* ==================== INFO SECTION ==================== */
+
+.profile-info-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 40px;
+    backdrop-filter: blur(10px);
+}
+
+.info-item {
+    margin-bottom: 35px;
+    padding-bottom: 35px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.info-item label {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+}
+
+.info-value {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.info-value span {
+    font-size: 18px;
+    font-weight: 500;
+    color: #FFFFFF;
+    flex: 1;
+    line-height: 1.5;
+}
+
+.masked-email {
+    font-family: monospace;
+    font-size: 17px;
+}
+
+/* ==================== PUBLIC VIEW NOTICE ==================== */
+
+.public-view-notice {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.public-view-notice p {
+    color: #FFC107;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* ==================== LOADING & ERROR ==================== */
+
+.profile-loading,
+.profile-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #00BCD4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.profile-loading p,
+.profile-error p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.error-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.profile-error h3 {
+    color: #FFFFFF;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.retry-btn,
+.back-btn {
+    margin: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.retry-btn {
+    background: #4CAF50;
+    color: #FFFFFF;
+}
+
+.retry-btn:hover {
+    background: #45A049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ==================== TERMS & CONDITIONS SECTION ==================== */
+
+.terms-section {
+    margin-top: 40px;
+    padding: 35px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.terms-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 30px 0;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.terms-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-wrap: nowrap;
+}
+
+/* ✅ XÓA :last-of-type margin-bottom vì không còn button delete */
+.terms-item:last-child {
+    border-bottom: none;
+}
+
+.terms-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+}
+
+.terms-read-btn {
+    padding: 10px 18px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.terms-read-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateX(3px);
+}
+
+/* ❌ ĐÃ XÓA .delete-account-btn */
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 15px;
+    }
+
+    .profile-header h1 {
+        font-size: 20px;
+    }
+
+    .back-button {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .profile-info-section {
+        padding: 25px;
+    }
+
+    .info-item {
+        margin-bottom: 28px;
+        padding-bottom: 28px;
+    }
+
+    .info-item label {
+        font-size: 15px;
+    }
+
+    .info-value span {
+        font-size: 16px;
+    }
+
+    .terms-section {
+        padding: 25px;
+        margin-top: 30px;
+    }
+
+    .terms-title {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .terms-item {
+        padding: 18px 0;
+    }
+
+    .terms-label {
+        font-size: 15px;
+    }
+
+    .terms-read-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+}
