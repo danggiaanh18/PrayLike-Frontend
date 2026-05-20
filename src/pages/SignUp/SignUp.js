@@ -186,7 +186,7 @@ const SignUp = ({ onSignUpComplete, onReturnToLogin }) => {
             return true; 
         }
         
-        const apiEndpoint = 'https://pray.yalinelena.church/auth/profile/tribe';
+        const apiEndpoint = 'https://old.pray.yalinelena.church/auth/profile/tribe';
         const postData = { tribe: tribeId };
 
         console.log(`🚀 [TribeSubmission] 準備發送 API 請求...`);

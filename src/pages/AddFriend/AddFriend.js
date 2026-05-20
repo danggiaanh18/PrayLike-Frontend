@@ -34,12 +34,12 @@ const AddFriend = ({ user, onLogout }) => {
   const loadRelationshipSets = async () => {
     try {
       const [pendingResult, friendsResult] = await Promise.all([
-        fetch('https://pray.yalinelena.church/api/friends/pending', {
+        fetch('https://old.pray.yalinelena.church/api/friends/pending', {
           method: 'GET',
           credentials: 'include',
           headers: { 'accept': 'application/json' }
         }).then(r => r.json()),
-        fetch('https://pray.yalinelena.church/api/friends', {
+        fetch('https://old.pray.yalinelena.church/api/friends', {
           method: 'GET',
           credentials: 'include',
           headers: { 'accept': 'application/json' }
@@ -79,7 +79,7 @@ const AddFriend = ({ user, onLogout }) => {
           incoming.map(async (inv) => {
             try {
               const response = await fetch(
-                `https://pray.yalinelena.church/api/users/search?user_id=${encodeURIComponent(inv.requester_user_id)}&limit=1`,
+                `https://old.pray.yalinelena.church/api/users/search?user_id=${encodeURIComponent(inv.requester_user_id)}&limit=1`,
                 {
                   method: 'GET',
                   credentials: 'include',
@@ -125,7 +125,7 @@ const AddFriend = ({ user, onLogout }) => {
 
     try {
       const response = await fetch(
-        `https://pray.yalinelena.church/api/users/search?user_id=${encodeURIComponent(searchQuery.trim())}&limit=10`,
+        `https://old.pray.yalinelena.church/api/users/search?user_id=${encodeURIComponent(searchQuery.trim())}&limit=10`,
         {
           method: 'GET',
           credentials: 'include',

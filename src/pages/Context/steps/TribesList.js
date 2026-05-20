@@ -89,7 +89,7 @@ const TribesList = ({ onBack, onTribeSelected, user }) => {
       return true;
     }
 
-    const apiEndpoint = 'https://pray.yalinelena.church/auth/profile/tribe';
+    const apiEndpoint = 'https://old.pray.yalinelena.church/auth/profile/tribe';
     const postData = { tribe: tribeId };
 
     console.log(`🚀 [TribesList] 準備發送 API 請求...`);

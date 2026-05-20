@@ -734,7 +734,7 @@ const TribesIntroduction = ({ onBack }) => {
   useEffect(() => {
     const fetchAndMergeTribes = async () => {
       try {
-        const response = await fetch('https://pray.yalinelena.church/auth/profile/tribes');
+        const response = await fetch('https://old.pray.yalinelena.church/auth/profile/tribes');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

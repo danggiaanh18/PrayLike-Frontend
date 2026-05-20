@@ -364,7 +364,7 @@ const Login = ({ onLogin }) => {
         return;
       }
 
-      const BASE_URL = 'https://pray.yalinelena.church';
+      const BASE_URL = 'https://old.pray.yalinelena.church';
       const oauthUrl = `${BASE_URL}/auth/${providerKey}/login`;
       
       console.log(`🔗 Redirecting to: ${oauthUrl}`);

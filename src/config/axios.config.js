@@ -1,7 +1,7 @@
 // src/config/axios.config.js
 import axios from 'axios';
 
-const API_BASE_URL = 'https://pray.yalinelena.church';
+const API_BASE_URL = 'https://old.pray.yalinelena.church';
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,

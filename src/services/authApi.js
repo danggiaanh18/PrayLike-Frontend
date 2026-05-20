@@ -1,4 +1,4 @@
-const BASE_URL = 'https://pray.yalinelena.church';
+const BASE_URL = 'https://old.pray.yalinelena.church';
 
 // ✅ Helper function để tạo headers đúng chuẩn
 const getHeaders = () => ({

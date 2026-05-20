@@ -46,26 +46,50 @@ import './context.css';
 
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+// ✅ FIX 1: formatTime — xử lý đúng timezone server UTC
 const formatTime = (timeString) => {
   if (!timeString) return 'Just now';
   try {
-    const normalized = timeString.endsWith('Z') || timeString.includes('+')
-      ? timeString : timeString + 'Z';
-    const date = new Date(normalized);
+    let date;
+    if (
+      timeString.endsWith('Z') ||
+      timeString.includes('+') ||
+      /T\d{2}:\d{2}:\d{2}-\d{2}:\d{2}$/.test(timeString)
+    ) {
+      date = new Date(timeString);
+    } else {
+      date = new Date(timeString + 'Z');
+    }
     if (isNaN(date.getTime())) return 'Just now';
     const now = new Date();
     const diffMs = now - date;
+    if (diffMs < 60000) return 'Just now';
     const diffMin = Math.floor(diffMs / 60000);
     const diffHour = Math.floor(diffMs / 3600000);
     const diffDay = Math.floor(diffMs / 86400000);
-    if (diffMin < 1) return 'Just now';
-    if (diffMin < 60) return `${diffMin} minutes ago`;
-    if (diffHour < 24) return `${diffHour} hours ago`;
-    if (diffDay < 7) return `${diffDay} days ago`;
+    if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? 's' : ''} ago`;
+    if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? 's' : ''} ago`;
+    if (diffDay < 7) return `${diffDay} day${diffDay !== 1 ? 's' : ''} ago`;
     return date.toLocaleDateString('en-CA', {
       timeZone: userTimeZone, year: 'numeric', month: '2-digit', day: '2-digit',
     });
   } catch (e) { return 'Just now'; }
+};
+
+// ✅ Helper: tính time từ client timestamp — độc lập với server timezone
+const calcTimeFromTimestamp = (submittedAt) => {
+  if (!submittedAt) return 'Just now';
+  const diffMs = Date.now() - submittedAt;
+  if (diffMs < 60000) return 'Just now';
+  const diffMin = Math.floor(diffMs / 60000);
+  const diffHour = Math.floor(diffMs / 3600000);
+  const diffDay = Math.floor(diffMs / 86400000);
+  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? 's' : ''} ago`;
+  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? 's' : ''} ago`;
+  if (diffDay < 7) return `${diffDay} day${diffDay !== 1 ? 's' : ''} ago`;
+  return new Date(submittedAt).toLocaleDateString('en-CA', {
+    timeZone: userTimeZone, year: 'numeric', month: '2-digit', day: '2-digit'
+  });
 };
 
 const tribeIdMap = {
@@ -86,7 +110,7 @@ const tribeIdMap = {
 const getActivityImageUrl = (imagePath) => {
   if (!imagePath) return null;
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
-  const baseUrl = 'https://pray.yalinelena.church';
+  const baseUrl = 'https://old.pray.yalinelena.church';
   const cleanPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
   return `${baseUrl}${cleanPath}`;
 };
@@ -182,7 +206,6 @@ const WitnessWall = ({ selectedCategory, currentUserId, allPosts, refreshBalance
               showCommentForm: false, commentText: '',
               isCommenting: false, comments: [], loadingComments: false
             };
-
             initialTranslationStates[originalPost.docid] = { isTranslating: false, translatedContent: null, translationError: null };
             initialWitnessFormStates[originalPost.docid] = { showWitnessForm: false, witnessText: '', witnessImage: null, isSubmitting: false };
           }
@@ -724,13 +747,10 @@ const Post = ({ post, allPosts, onLike, onComment, onWitnessCreated, onPostEdite
   const [translationError, setTranslationError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  // ✅ FIX TRIỆT ĐỂ: dùng ref để lưu nội dung edit — không bị stale sau reload
   const [editContent, setEditContent] = useState(post.content || '');
   const [editTitle, setEditTitle] = useState(post.title || '');
   const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
 
-  // ✅ FIX: Sync editContent/editTitle khi post.content thay đổi từ props
-  // Chỉ sync khi KHÔNG đang edit — tránh override nội dung đang gõ
   useEffect(() => {
     if (!isEditing) {
       setEditContent(post.content || '');
@@ -753,13 +773,24 @@ const Post = ({ post, allPosts, onLike, onComment, onWitnessCreated, onPostEdite
     }
   }, [post.id, allPosts]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // ✅ FIX 2 & 3: localCommentTimeMap dùng _submittedAt — độc lập timezone server
+  const localCommentTimeMap = new Map();
+  localComments.forEach(c => {
+    const displayTime = calcTimeFromTimestamp(c._submittedAt);
+    if (c.id) localCommentTimeMap.set(c.id, displayTime);
+    if (c.docid && c.docid !== c.id) localCommentTimeMap.set(c.docid, displayTime);
+  });
+
   const serverComments = allPosts
     .filter(c => c.parent_docid === post.id && c.event !== 'witness')
     .map(c => ({
       id: c.docid, author: c.userid, content: c.content,
-      time: formatTime(c.datetime),
+      time: localCommentTimeMap.has(c.docid)
+        ? localCommentTimeMap.get(c.docid)
+        : formatTime(c.datetime),
       likes: c.amen_count || 0, isLiked: c.amened || false, userid: c.userid, avatar_url: c.avatar_url
     }));
+
   const serverCommentIds = new Set(serverComments.map(c => c.id));
   const filteredLocal = localComments.filter(c => !serverCommentIds.has(c.id));
   const postComments = [...filteredLocal, ...serverComments];
@@ -799,18 +830,21 @@ const Post = ({ post, allPosts, onLike, onComment, onWitnessCreated, onPostEdite
     setIsSubmittingEdit(true);
     try {
       const result = await ApiService.editPost(post.id, { content: editContent.trim(), title: editTitle.trim() || null });
-      console.log('✅ Full result:', JSON.stringify(result, null, 2));
       if (result.success) {
-        // ✅ Lấy nội dung mới từ server (ưu tiên) hoặc từ input
-        const newContent = result.post?.content || editContent.trim();
-        const newTitle = result.post?.title || editTitle.trim();
-        // ✅ Update local state ngay — không chờ fetchPosts
+        const updatedPost = result.post || result.data || {};
+        const newContent = updatedPost.content || editContent.trim();
+        const newTitle = updatedPost.title ?? editTitle.trim();
         setEditContent(newContent);
         setEditTitle(newTitle);
         setIsEditing(false);
-        // ✅ Notify parent để update posts state
-        if (onPostEdited) onPostEdited(post.id, post.id, { content: newContent, title: newTitle });
+        if (onPostEdited) onPostEdited(post.id, post.id, {
+          content: newContent,
+          title: newTitle,
+          userid: post.userid,  // ✅ giữ userid
+          time: post.time,    // ✅ giữ time gốc
+        });
       } else { alert(`Edit failed: ${result.message}`); }
+
     } catch (error) { alert(`Error: ${error.message}`); }
     finally { setIsSubmittingEdit(false); }
   };
@@ -909,6 +943,7 @@ const Post = ({ post, allPosts, onLike, onComment, onWitnessCreated, onPostEdite
     } catch (error) { setCommentStates(prev => ({ ...prev, [commentId]: { ...prev[commentId], isLiked: prevIsLiked, likeCount: prevCount, isLiking: false } })); }
   };
 
+  // ✅ FIX 2: handleCommentSubmit — lưu docid thật + _submittedAt timestamp
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!commentText.trim() || isCommenting) return;
@@ -918,7 +953,16 @@ const Post = ({ post, allPosts, onLike, onComment, onWitnessCreated, onPostEdite
       const result = await ApiService.addComment({ userid: currentUserId, content: submittedText, docid: post.id, sn: post.sn });
       if (result.success) {
         setCommentText('');
-        const newComment = { id: result.comment?.docid || `temp-${Date.now()}`, author: currentUserId, content: submittedText, time: 'Just now', likes: 0, isLiked: false, userid: currentUserId, avatar_url: null };
+        const newCommentDocid = result.comment?.docid || null;
+        const newComment = {
+          id: newCommentDocid || `temp-${Date.now()}`,
+          docid: newCommentDocid,
+          author: currentUserId,
+          content: submittedText,
+          time: 'Just now',
+          _submittedAt: Date.now(),
+          likes: 0, isLiked: false, userid: currentUserId, avatar_url: null
+        };
         setLocalComments(prev => [newComment, ...prev]);
         setCommentStates(prev => ({ ...prev, [newComment.id]: { likeCount: 0, isLiked: false, isLiking: false } }));
         if (onComment) await onComment(post.id);
@@ -932,8 +976,6 @@ const Post = ({ post, allPosts, onLike, onComment, onWitnessCreated, onPostEdite
   const handleCommentDelete = (commentId) => { setLocalComments(prev => prev.filter(c => c.id !== commentId)); };
   const handleCommentReply = (commentId, reply) => { console.log(`💬 Reply to comment ${commentId}:`, reply); };
 
-  // ✅ Nội dung hiển thị: ưu tiên editContent (đã được sync) khi không edit,
-  // ✅ Nội dung hiển thị: dùng post.content từ props (đã được handlePostEdited update)
   const displayContent = post.content || '';
   const displayTitle = post.title || '';
 
@@ -967,7 +1009,6 @@ const Post = ({ post, allPosts, onLike, onComment, onWitnessCreated, onPostEdite
         )}
       </div>
       <div className="post-content">
-        {/* ✅ Hiển thị displayTitle/displayContent — luôn sync với props */}
         {displayTitle && <h3>{displayTitle}</h3>}
         <p style={{ whiteSpace: 'pre-wrap' }}>{displayContent}</p>
         <button className={`post-translate-button ${isTranslating ? 'translating' : ''} ${translatedContent ? 'active' : ''}`} onClick={handleTranslate} disabled={isTranslating}>
@@ -986,7 +1027,6 @@ const Post = ({ post, allPosts, onLike, onComment, onWitnessCreated, onPostEdite
               <button type="submit" disabled={!editContent.trim() || isSubmittingEdit} className="submit-btn">
                 {isSubmittingEdit ? 'Saving...' : '💾 Save'}
               </button>
-              {/* ✅ Cancel: reset về post.content từ props — luôn đúng */}
               <button type="button" onClick={() => { setIsEditing(false); setEditContent(post.content || ''); setEditTitle(post.title || ''); }} className="cancel-btn">Cancel</button>
             </div>
           </form>
@@ -1356,9 +1396,6 @@ const MainApp = ({ user, onLogout }) => {
         const currentAllPosts = allPostsRef.current;
 
         const transformedPosts = filteredPosts.map(post => {
-          // ✅ ĐÚNG: log nằm ngoài object return
-          console.log(`📊 [${post.docid}] comment_count=${post.comment_count} | amen_count=${post.amen_count} | content="${post.content?.slice(0, 30)}"`);
-
           return {
             id: post.docid,
             sn: post.sn,
@@ -1383,7 +1420,6 @@ const MainApp = ({ user, onLogout }) => {
           };
         });
 
-
         setPosts(prev => {
           const prevMap = new Map(prev.map(p => [p.id, p]));
           return transformedPosts.map(newPost => {
@@ -1401,6 +1437,7 @@ const MainApp = ({ user, onLogout }) => {
 
             return {
               ...newPost,
+              time: newPost.time || existing?.time || null,
               likes: finalLikes,
               isLiked: finalIsLiked,
               serverCommentCount: Math.max(
@@ -1460,16 +1497,15 @@ const MainApp = ({ user, onLogout }) => {
     }
   }, []);
 
-  // ✅ FIX TRIỆT ĐỂ: handlePostEdited giữ toàn bộ counts, chỉ update content/title
   const handlePostEdited = useCallback((oldDocid, newDocid, newPostData) => {
     setPosts(prev => prev.map(p =>
       p.id === oldDocid
         ? {
           ...p,
-          id: oldDocid,                          // ✅ giữ nguyên key
           content: newPostData?.content || p.content,
-          title: newPostData?.title || p.title,
-          // ✅ Bảo vệ comment count — không bao giờ về 0
+          title: newPostData?.title ?? p.title,
+          userid: newPostData?.userid || p.userid,
+          time: newPostData?.time ?? p.time ?? p.datetime ?? null, // ✅ fallback đầy đủ
           calculatedComments: Math.max(p.calculatedComments || 0, p.serverCommentCount || 0),
           serverCommentCount: Math.max(p.serverCommentCount || 0, p.calculatedComments || 0),
         }
@@ -1477,15 +1513,24 @@ const MainApp = ({ user, onLogout }) => {
     ));
     setAllPosts(prev => prev.map(p =>
       p.docid === oldDocid
-        ? { ...p, content: newPostData?.content || p.content, title: newPostData?.title || p.title }
+        ? { ...p, content: newPostData?.content || p.content, title: newPostData?.title ?? p.title }
         : p
     ));
   }, []);
+
 
   useEffect(() => {
     fetchPosts(initialCategory, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // ✅ Re-fetch khi viewScope thay đổi (my ↔ all)
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchPosts(selectedCategory, 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewScope]);
+
 
   const handleCloseTribeDetail = () => setShowTribeDetail(false);
 
@@ -1690,3 +1735,4 @@ const MainApp = ({ user, onLogout }) => {
 };
 
 export default MainApp;
+

@@ -725,7 +725,7 @@ const TribeDetail = ({ tribeId, tribeName, tribeIcon, onBack, onTribeSelected, u
       try {
         console.log(`🔍 正在獲取支派 ${tribeId} 的詳細資訊...`);
         
-        const response = await fetch('https://pray.yalinelena.church/auth/profile/tribes');
+        const response = await fetch('https://old.pray.yalinelena.church/auth/profile/tribes');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
